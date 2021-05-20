@@ -25,40 +25,25 @@ public class grep {
     }
 
     public static void main(String[] args) throws FileNotFoundException {
-        Scanner in = new Scanner(System.in);
-        System.out.print("input line:");
-        String line = in.nextLine();
         boolean flagR = false, flagV = false, flagI = false;
-        if (!line.matches("(.*)\\.txt(.*)")) {
-            System.out.println("Вы не ввели название файла.");
-            line = in.nextLine();
+        if (args.length == 0) System.out.println("В консоли нет аргументов");
+        for (String words : args) {
+            switch (words) {
+                case "[-r]" -> flagR = true;
+                case "[-v]" -> flagV = true;
+                case "[-i]" -> flagI = true;
+            }
         }
-        String inputName = line.substring(line.lastIndexOf(" ") + 1);
+        String inputName = args[args.length - 1];
+        String word = args[args.length - 2];
         BufferedReader reader = new BufferedReader(new FileReader(inputName));
         try {
             reader = new BufferedReader(new FileReader(inputName));
         } catch (IOException e) {
             System.out.println("Данного файла не существует");
         }
-        if (line.matches("(.*)\\[-r\\](.*)")) flagR = true;
-        if (line.matches("(.*)\\[-v\\](.*)")) flagV = true;
-        if (line.matches("(.*)\\[-i\\](.*)")) flagI = true;
-        String word = "";
-
-        if (flagI | flagR | flagV) {
-            try {
-                word = line.substring(line.lastIndexOf("]") + 2, line.lastIndexOf(" "));
-            } catch (Exception e) {
-                System.out.println("Вы не ввели слово");
-            }
-        } else {
-            try {
-                word = line.substring(0, line.lastIndexOf(" "));
-            } catch (Exception e) {
-                System.out.println("Вы не ввели слово");
-            }
-        }
         try {
+            String line;
             while ((line = reader.readLine()) != null) {
                 if (flagR) {
                     if (flagV) {
@@ -103,3 +88,4 @@ public class grep {
         }
     }
 }
+
