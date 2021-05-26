@@ -1,7 +1,9 @@
+package SuperMain;
+
 import java.io.*;
 
 
-public class grep {
+public class Grep {
 
     public static boolean check(String line, String word) {
         String[] words = line.split(" ");
@@ -71,18 +73,18 @@ public class grep {
                 } else {
                     if (flagV) {
                         if (flagI) {
-                            if (!grep.checkI(line, word))
+                            if (!Grep.checkI(line, word))
                                 System.out.println(line);
                         } else {
-                            if (!grep.check(line, word))
+                            if (!Grep.check(line, word))
                                 System.out.println(line);
                         }
                     } else {
                         if (flagI) {
-                            if (grep.checkI(line, word))
+                            if (Grep.checkI(line, word))
                                 System.out.println(line);
                         } else {
-                            if (grep.check(line, word))
+                            if (Grep.check(line, word))
                                 System.out.println(line);
                         }
                     }

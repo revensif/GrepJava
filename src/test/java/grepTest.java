@@ -1,50 +1,1 @@
-import junit.framework.TestCase;
-
-
-public class grepTest extends TestCase {
-
-    public void testCheck() {
-        String result = "Нет";
-        String line = "Как сегодня хорошо";
-        String word = "как";
-        String[] words = line.split(" ");
-        for (String i : words) {
-            if (i.equals(word)) {
-                result = "Есть";
-                break;
-            }
-        }
-        assertEquals(result, "Нет");
-    }
-
-    public void testCheckR() {
-        String result = "Нет";
-        String line = "Как сегодня хорошо";
-        String word = "год";
-         if (line.matches("(.*)" + word + "(.*)")) result = "Есть";
-        assertEquals(result, "Есть");
-    }
-
-    public void testCheckI() {
-        String result = "Нет";
-        String line = "Как сегодня хорошо";
-        String word = "как";
-        String[] words = line.split(" ");
-        for (String i : words) {
-            if (i.equalsIgnoreCase(word)) {
-                result = "Есть";
-                break;
-            }
-        }
-        assertEquals(result, "Есть");
-    }
-
-    public void testCheckIR() {
-        String result = "Нет";
-        String line = "Как сегодня хорошо";
-        String word = "ГОД";
-        if (line.toLowerCase().contains(word.toLowerCase())) result = "Есть";
-        assertEquals(result, "Есть");
-    }
-}
-
+import SuperMain.*;import org.junit.Assert;import org.junit.Test;import java.io.ByteArrayOutputStream;import java.io.PrintStream;public class grepTest{    void check(String[] args, String result) throws Exception {        ByteArrayOutputStream output = new ByteArrayOutputStream();        System.setOut(new PrintStream(output));        Grep.main(args);        String value = output.toString();        Assert.assertEquals(value, result);    }    @Test    public void checkAll() throws Exception {         check(new String[]{"grep", "[-r]","[-v]", "[-i]","программ", "test.txt"}, "Как пояснялось ранее, консольный ввод буферизуется построчно.\r\n" +                 "Это означает, что для передачи символов, вводимых с клавиатуры, приходится нажимать клавишу <Enter>, что приводит к формированию последовательности символов перевода строки и возврата каретки.\r\n" +                 "Эти символы сохраняются во входном буфере вместе с введенными с клавиатуры.\r\n" +                 "Кроме того, если ввести с клавиатуры несколько символов подряд, не нажав клавишу <Enter>, они так и останутся во входном буфере.\r\n" +                 "В рассматриваемом здесь цикле эти символы отбрасываются до тех пор, пока не будет достигнут конец строки.\r\n" +                 "После представления ряда других языковых средств Java в главе 10 будут рассмотрены более совершенные способы обработки консольного ввода.\r\n");        check(new String[]{"grep","программ", "test.txt"}, "");        check(new String[]{"grep", "[-r]", "программ", "test.txt"}, "Если не сделать этого, лишние символы будут передаваться программе в качестве выбранной буквы, что не соответствует действительности.\r\n" +                "Для того чтобы убедиться в этом, попробуйте закомментировать внутренний цикл do-while в исходном коде программы.\r\n" +                "Но применение метода read() в данной программе дает элементарное представление о принципе действия системы ввода-вывода в Java.\r\n" +                "А кроме того, в данной программе демонстрируется еще один пример применения циклов в практике программирования на Java.\r\n");        check(new String[]{"grep", "[-r]", "[-v]", "программ", "test.txt"},"Как пояснялось ранее, консольный ввод буферизуется построчно.\r\n" +                "Это означает, что для передачи символов, вводимых с клавиатуры, приходится нажимать клавишу <Enter>, что приводит к формированию последовательности символов перевода строки и возврата каретки.\r\n" +                "Эти символы сохраняются во входном буфере вместе с введенными с клавиатуры.\r\n" +                "Кроме того, если ввести с клавиатуры несколько символов подряд, не нажав клавишу <Enter>, они так и останутся во входном буфере.\r\n" +                "В рассматриваемом здесь цикле эти символы отбрасываются до тех пор, пока не будет достигнут конец строки.\r\n" +                "После представления ряда других языковых средств Java в главе 10 будут рассмотрены более совершенные способы обработки консольного ввода.\r\n");    }}
