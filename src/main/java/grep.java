@@ -1,8 +1,5 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Scanner;
+
 
 public class grep {
 
@@ -22,6 +19,14 @@ public class grep {
                 return true;
         }
         return false;
+    }
+
+    public static boolean checkR(String line, String word) {
+        return line.matches("(.*)" + word + "(.*)");
+    }
+
+    public static boolean checkIR(String line, String word) {
+        return line.toLowerCase().contains(word.toLowerCase());
     }
 
     public static void main(String[] args) throws FileNotFoundException {
@@ -48,18 +53,18 @@ public class grep {
                 if (flagR) {
                     if (flagV) {
                         if (flagI) {
-                            if (!line.matches("(.*)(?i)" + word + "(.*)"))
+                            if (!checkIR(line, word))
                                 System.out.println(line);
                         } else {
-                            if (!line.matches("(.*)" + word + "(.*)"))
+                            if (!checkR(line, word))
                                 System.out.println(line);
                         }
                     } else {
                         if (flagI) {
-                            if (line.matches("(.*)(?i)" + word + "(.*)"))
+                            if (checkIR(line, word))
                                 System.out.println(line);
                         } else {
-                            if (line.matches("(.*)" + word + "(.*)"))
+                            if (checkR(line, word))
                                 System.out.println(line);
                         }
                     }
