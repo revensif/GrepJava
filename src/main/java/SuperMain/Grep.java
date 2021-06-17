@@ -23,50 +23,53 @@ public class Grep {
         return false;
     }
 
-    public static boolean checkR(String line, String word) {
-        return line.matches("(.*)" + word + "(.*)");
-    }
-
-    public static boolean checkIR(String line, String word) {
-        return line.toLowerCase().contains(word.toLowerCase());
-    }
-
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) {
         boolean flagR = false, flagV = false, flagI = false;
-        if (args.length == 0) System.out.println("В консоли нет аргументов");
+        if (args.length < 2) {
+            System.out.println("В консоли нет аргументов");
+            System.exit(0);
+        }
+        String string = String.join(" ", args);
+         if (!string.matches("(-r)?\s?(-v)?\s?(-i)?\s?(.)+\s(.)+")) {
+             System.out.println("Неправильный ввод: [-r] [-v] [-i] word filename.txt\r\n" +
+                     "Опции записываются в таком порядке, как показано на примере выше\r\n" +
+                     "Далее перечислены через пробел слово, которое нужно найти и название файла");
+             System.exit(0);
+         }
         for (String words : args) {
             switch (words) {
-                case "[-r]" -> flagR = true;
-                case "[-v]" -> flagV = true;
-                case "[-i]" -> flagI = true;
+                case "-r" -> flagR = true;
+                case "-v" -> flagV = true;
+                case "-i" -> flagI = true;
             }
         }
         String inputName = args[args.length - 1];
         String word = args[args.length - 2];
-        BufferedReader reader = new BufferedReader(new FileReader(inputName));
+        BufferedReader reader = null;
         try {
             reader = new BufferedReader(new FileReader(inputName));
-        } catch (IOException e) {
-            System.out.println("Данного файла не существует");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
         try {
             String line;
-            while ((line = reader.readLine()) != null) {
+            while ((line = reader != null ? reader.readLine() : null) != null) {
                 if (flagR) {
+                    final boolean matches = line.toLowerCase().matches("(.*)" + word.toLowerCase() + "(.*)");
                     if (flagV) {
                         if (flagI) {
-                            if (!checkIR(line, word))
+                            if (!matches)
                                 System.out.println(line);
                         } else {
-                            if (!checkR(line, word))
+                            if (!line.matches("(.*)" + word + "(.*)"))
                                 System.out.println(line);
                         }
                     } else {
                         if (flagI) {
-                            if (checkIR(line, word))
+                            if (matches)
                                 System.out.println(line);
                         } else {
-                            if (checkR(line, word))
+                            if (line.matches("(.*)" + word + "(.*)"))
                                 System.out.println(line);
                         }
                     }
