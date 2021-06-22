@@ -1,6 +1,7 @@
 package SuperMain;
 
 import java.io.*;
+import java.util.regex.Pattern;
 
 
 public class Grep {
@@ -26,36 +27,36 @@ public class Grep {
     public static void main(String[] args) {
         boolean flagR = false, flagV = false, flagI = false;
         if (args.length < 2) {
-            System.out.println("В консоли нет аргументов");
-            System.exit(0);
+            System.out.println("В консоли нет аргументов\r\n" +
+                    "Пример ввода: [-r] [-v] [-i] word filename.txt\r\n" +
+                    "Первые три опции не обязательные, поэтому минимум элементов это 2\r\n" +
+                    "Этими элементами являются слово и название файла\r\n" +
+                    "Перед ними могут идти три опции, функции которых написаны ниже\r\n" +
+                    "Опция [-r] - вместо слова ищет регулярное выражение\r\n" +
+                    "Опция [-v] - инвертирует условие фильтрации(выводит всё что не соответствует)\r\n" +
+                    "Опция [-i] - игнорирует регистр слов");
+            System.exit(1);
         }
-        String string = String.join(" ", args);
-         if (!string.matches("(-r)?\s?(-v)?\s?(-i)?\s?(.)+\s(.)+")) {
-             System.out.println("Неправильный ввод: [-r] [-v] [-i] word filename.txt\r\n" +
-                     "Опции записываются в таком порядке, как показано на примере выше\r\n" +
-                     "Далее перечислены через пробел слово, которое нужно найти и название файла");
-             System.exit(0);
-         }
-        for (String words : args) {
-            switch (words) {
+        for (int i = 0; i < args.length - 2; i++) {
+            switch (args[i]) {
                 case "-r" -> flagR = true;
                 case "-v" -> flagV = true;
                 case "-i" -> flagI = true;
+                default -> {
+                    System.out.println("Неизвестный ключ: " + args[i]);
+                    System.exit(1);
+                }
             }
         }
+        Pattern pattern = Pattern.compile("(?iU)", Pattern.CASE_INSENSITIVE + Pattern.UNICODE_CASE);
         String inputName = args[args.length - 1];
         String word = args[args.length - 2];
-        BufferedReader reader = null;
         try {
-            reader = new BufferedReader(new FileReader(inputName));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        try {
+            BufferedReader reader = new BufferedReader(new FileReader(inputName));
             String line;
-            while ((line = reader != null ? reader.readLine() : null) != null) {
+            while ((line = reader.readLine()) != null) {
                 if (flagR) {
-                    final boolean matches = line.toLowerCase().matches("(.*)" + word.toLowerCase() + "(.*)");
+                    final boolean matches = line.matches(pattern + "(.*)" + word + "(.*)");
                     if (flagV) {
                         if (flagI) {
                             if (!matches)
@@ -93,8 +94,8 @@ public class Grep {
                     }
                 }
             }
-        } catch (
-                IOException e) {
+        } catch (IOException e) {
+            System.out.println("Данного файла не существует");
         }
     }
 }
