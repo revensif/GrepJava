@@ -1,6 +1,7 @@
 package SuperMain;
 
 import java.io.*;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
@@ -48,29 +49,31 @@ public class Grep {
                 }
             }
         }
-        Pattern pattern = Pattern.compile("(?iU)", Pattern.CASE_INSENSITIVE + Pattern.UNICODE_CASE);
         String inputName = args[args.length - 1];
         String word = args[args.length - 2];
+        Pattern pattern = Pattern.compile(word, Pattern.UNICODE_CASE + Pattern.CASE_INSENSITIVE);
         try {
             BufferedReader reader = new BufferedReader(new FileReader(inputName));
             String line;
             while ((line = reader.readLine()) != null) {
                 if (flagR) {
-                    final boolean matches = line.matches(pattern + "(.*)" + word + "(.*)");
+                    Matcher matcher = pattern.matcher(line);
+                    final boolean matcherI = matcher.find();
+                    final boolean matches = line.matches("(.*)" + word + "(.*)");
                     if (flagV) {
                         if (flagI) {
-                            if (!matches)
+                            if (!matcherI)
                                 System.out.println(line);
                         } else {
-                            if (!line.matches("(.*)" + word + "(.*)"))
+                            if (!matches)
                                 System.out.println(line);
                         }
                     } else {
                         if (flagI) {
-                            if (matches)
+                            if (matcherI)
                                 System.out.println(line);
                         } else {
-                            if (line.matches("(.*)" + word + "(.*)"))
+                            if (matches)
                                 System.out.println(line);
                         }
                     }
@@ -96,6 +99,7 @@ public class Grep {
             }
         } catch (IOException e) {
             System.out.println("Данного файла не существует");
+            System.exit(1);
         }
     }
 }
