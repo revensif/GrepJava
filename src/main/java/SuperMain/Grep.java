@@ -58,11 +58,11 @@ public class Grep {
             while ((line = reader.readLine()) != null) {
                 if (flagR) {
                     Matcher matcher = pattern.matcher(line);
-                    final boolean matcherI = matcher.find();
+                    final boolean matchesI = matcher.find();
                     final boolean matches = line.matches("(.*)" + word + "(.*)");
                     if (flagV) {
                         if (flagI) {
-                            if (!matcherI)
+                            if (!matchesI)
                                 System.out.println(line);
                         } else {
                             if (!matches)
@@ -70,7 +70,7 @@ public class Grep {
                         }
                     } else {
                         if (flagI) {
-                            if (matcherI)
+                            if (matchesI)
                                 System.out.println(line);
                         } else {
                             if (matches)
